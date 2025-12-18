@@ -55,15 +55,15 @@ export const ExtractionReview: React.FC = () => {
     const rows = transactions.map((t) => [
       t.date,
 
-      // ✅ Signed amount based on category
+      // Signed amount based on category
       t.category === "income"
         ? `+${t.amount.toFixed(2)}`
         : `-${t.amount.toFixed(2)}`,
 
-      // ✅ Human-readable type
+      // Human-readable type
       t.category === "income" ? "Income" : "Expense",
 
-      // ✅ Human-readable taxable
+      // Human-readable taxable
       t.taxable ? "Yes" : "No",
     ]);
 

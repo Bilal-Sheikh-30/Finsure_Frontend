@@ -109,8 +109,8 @@ export const History: React.FC = () => {
                 className="w-full bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-color)] rounded-lg px-4 py-2 focus:border-[#14e7ff] focus:outline-none"
               >
                 <option value="all">All Types</option>
-                <option value="invoice">Invoice</option>
-                <option value="receipt">Receipt</option>
+                {/* <option value="invoice">Invoice</option> */}
+                <option value="mobile_wallet_statement">Mobile Wallet Statement</option>
                 <option value="bank_statement">Bank Statement</option>
               </select>
             </div>

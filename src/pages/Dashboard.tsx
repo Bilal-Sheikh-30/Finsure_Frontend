@@ -62,7 +62,7 @@ export const Dashboard: React.FC = () => {
         setSummary(summaryData);
         setActivities(activitiesData);
 
-        // 👇 show latest 5 uploads
+        // show latest 5 uploads
         setRecentUploads(history.slice(0, 5));
       } finally {
         setIsLoading(false);

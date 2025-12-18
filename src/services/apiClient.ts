@@ -19,7 +19,7 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
-// 🔹 REAL AUTH API
+// REAL AUTH API
 export const authApi = {
   signup: async (data: {
     name: string;
@@ -36,13 +36,13 @@ export const authApi = {
     return res.data;
   },
 
-  // ✅ UPDATE PROFILE (name & email)
+  // UPDATE PROFILE (name & email)
   updateProfile: async (data: { name: string; email: string }) => {
     const res = await apiClient.patch("/api/v1/auth/edit/me", data);
     return res.data;
   },
 
-  // ✅ CHANGE PASSWORD
+  // CHANGE PASSWORD
   changePassword: async (data: {
     current_password: string;
     new_password: string;
@@ -109,7 +109,7 @@ export const extractionApi = {
     return res.data.transactions.map((t: any, index: number) => ({
       id: String(index + 1),
 
-      // ✅ extract DATE ONLY (YYYY-MM-DD)
+      // extract DATE ONLY (YYYY-MM-DD)
       date: t.date ? t.date.split("T")[0] : "",
 
       amount: t.amount,
