@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
   Bell,
   Upload,
-  Menu,
   LogOut,
   Sun,
   Moon,
@@ -13,18 +11,18 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 import { useTheme } from "../contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
-
-interface TopbarProps {
-  onMenuClick?: () => void;
-}
+import { GlobalSearch } from "./GlobalSearch";
 
 /**
  * Sticky glass topbar for authenticated pages.
  *
  * Mirrors the public nav's aesthetic: backdrop blur, accent-tinted icon
  * buttons, and a primary "Upload" CTA that matches the AnimatedButton style.
+ *
+ * No mobile hamburger: navigation on small screens lives entirely in the
+ * bottom MobileNav, so a drawer-trigger here would be redundant clutter.
  */
-export const Topbar: React.FC<TopbarProps> = ({ onMenuClick }) => {
+export const Topbar: React.FC = () => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -50,28 +48,8 @@ export const Topbar: React.FC<TopbarProps> = ({ onMenuClick }) => {
 
   return (
     <header className="sticky top-0 z-30 bg-[var(--bg-primary)]/70 backdrop-blur-xl border-b border-[var(--border-color)] px-4 py-3 flex items-center gap-3">
-      <button
-        onClick={onMenuClick}
-        className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] transition-colors"
-        aria-label="Open menu"
-      >
-        <Menu size={20} />
-      </button>
-
-      {/* Search */}
-      <div className="flex-1 max-w-2xl">
-        <div className="relative group">
-          <Search
-            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] group-focus-within:text-[color:var(--accent)] transition-colors"
-            size={18}
-          />
-          <input
-            type="text"
-            placeholder="Search transactions, reports, files…"
-            className="w-full bg-[var(--bg-secondary)] text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/70 pl-10 pr-4 py-2.5 rounded-xl border border-[var(--border-color)] focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all text-sm"
-          />
-        </div>
-      </div>
+      {/* Global quick-find: live search across pages, FAQs, docs, actions. */}
+      <GlobalSearch className="flex-1 max-w-2xl" />
 
       {/* Actions */}
       <div className="flex items-center gap-2">

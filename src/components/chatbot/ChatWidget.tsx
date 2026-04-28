@@ -36,7 +36,9 @@ export const ChatWidget: React.FC = () => {
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
         transition={{ type: "spring", stiffness: 350, damping: 22 }}
-        className="fixed z-[60] right-5 bottom-5 md:right-6 md:bottom-6 w-14 h-14 rounded-full flex items-center justify-center text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--accent-ring)]"
+        // Mobile: lifted above the bottom MobileNav (≈64px + iOS safe area)
+        // so the FAB never overlaps the tab bar. Desktop: parks at bottom-6.
+        className="fixed z-[60] right-5 bottom-[calc(env(safe-area-inset-bottom,0px)+80px)] md:right-6 md:bottom-6 w-14 h-14 rounded-full flex items-center justify-center text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-[color:var(--accent-ring)]"
         style={{
           background:
             "linear-gradient(135deg, var(--accent), var(--accent-hover))",
@@ -99,7 +101,7 @@ export const ChatWidget: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 380, damping: 32 }}
-            className="fixed z-[59] right-4 md:right-6 bottom-[88px] md:bottom-[96px] w-[min(400px,calc(100vw-2rem))] h-[min(600px,calc(100vh-120px))] origin-bottom-right"
+            className="fixed z-[59] right-4 md:right-6 bottom-[calc(env(safe-area-inset-bottom,0px)+152px)] md:bottom-[96px] w-[min(400px,calc(100vw-2rem))] h-[min(600px,calc(100vh-200px))] md:h-[min(600px,calc(100vh-120px))] origin-bottom-right"
           >
             <div
               className="w-full h-full rounded-3xl overflow-hidden border border-[var(--border-color)] bg-[var(--bg-secondary)]/95 backdrop-blur-xl"

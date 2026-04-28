@@ -452,6 +452,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { reportsApi } from "../services/apiClient";
 import { toast } from "../utils/toast";
 import { useTheme } from "../contexts/ThemeContext";
+import { HorizontalScroller } from "../components/ui/HorizontalScroller";
 
 /* ===================== TYPES ===================== */
 
@@ -621,15 +622,22 @@ export const Reports: React.FC = () => {
         <style>{`
           @media print {
             @page { size: A4; margin: 15mm; }
-            body { background: white !important; }
+            body { background: white !important; overflow: visible !important; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             body * { visibility: hidden; }
             #pdf-content, #pdf-content * { visibility: visible; }
-            #pdf-content { 
-              position: absolute; 
-              left: 0; 
-              top: 0; 
-              width: 100%; 
+            /* Force-override anything the on-screen mobile-scroll wrapper
+               applies, so the downloaded / printed PDF is identical
+               regardless of whether the user triggers it from a phone
+               or a desktop. */
+            #pdf-content {
+              position: absolute !important;
+              left: 0 !important;
+              top: 0 !important;
+              width: 100% !important;
+              min-width: 0 !important;
+              max-width: none !important;
+              margin: 0 !important;
               background: white !important;
               color: #000 !important;
             }
@@ -683,11 +691,23 @@ export const Reports: React.FC = () => {
           </button>
         </div>
 
-        <div
-          id="pdf-content"
-          className="bg-white text-black p-8 rounded-lg"
-          style={{ maxWidth: "210mm", margin: "0 auto" }}
-        >
+        {/* Mobile viewing wrapper.
+            The report itself MUST stay at its A4 layout width so the
+            on-screen preview matches the exported PDF exactly — we just
+            give it a horizontal scroller on narrow screens with the
+            same chevron affordance used elsewhere in the app.
+            • minWidth ensures the layout doesn't collapse on phones
+              (otherwise a 360px parent would crush the FINSURE header).
+            • maxWidth keeps it identical to the original A4 cap on
+              desktop and on Ctrl+P print.
+            • The existing @media print rules override position/width
+              so neither the wrapper nor minWidth affects printing. */}
+        <HorizontalScroller>
+          <div
+            id="pdf-content"
+            className="bg-white text-black p-8 rounded-lg mx-auto"
+            style={{ minWidth: "720px", maxWidth: "210mm" }}
+          >
           {/* Header with FINSURE Branding */}
           <div className="print-header bg-gradient-to-r from-[#0ab6ff] to-[#14e7ff] text-white p-6 rounded-lg mb-6">
             <div className="flex items-center justify-between">
@@ -1283,7 +1303,8 @@ export const Reports: React.FC = () => {
               www.finsure.app | support@finsure.com
             </p>
           </div>
-        </div>
+          </div>
+        </HorizontalScroller>
       </div>
     );
   }
