@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { extractionApi } from "../services/apiClient";
 import { toast } from "../utils/toast";
 import { AnimatedButton } from "../components/ui/AnimatedButton";
+import { HorizontalScroller } from "../components/ui/HorizontalScroller";
 
 interface Transaction {
   id: string;
@@ -237,10 +238,12 @@ export const ExtractionReview: React.FC = () => {
         ))}
       </div>
 
-      {/* Table */}
-      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
+      {/* Table — the styled card lives on HorizontalScroller itself so
+          its floating "scroll →" chevron isn't clipped by an outer
+          overflow-hidden wrapper. */}
+      <div>
+        <HorizontalScroller className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl">
+          <table className="w-full min-w-[640px]">
             <thead className="bg-[var(--bg-primary)]/70 border-b border-[var(--border-color)]">
               <tr>
                 {["Date", "Amount", "Type", "Category", "Taxable", "Actions"].map(
@@ -414,9 +417,9 @@ export const ExtractionReview: React.FC = () => {
               </AnimatePresence>
             </tbody>
           </table>
-        </div>
+        </HorizontalScroller>
         {filtered.length === 0 && (
-          <div className="py-14 text-center text-sm text-[var(--text-secondary)]">
+          <div className="mt-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl py-14 text-center text-sm text-[var(--text-secondary)]">
             No transactions in this view yet.
           </div>
         )}
