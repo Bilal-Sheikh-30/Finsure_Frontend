@@ -16,7 +16,6 @@ import { motion } from "framer-motion";
 import dashboard from "../assets/dashboard.webp";
 import dashboards from "../assets/dashboards.webp";
 import extraction from "../assets/extraction.webp";
-import help from "../assets/help.webp";
 import history from "../assets/history.webp";
 import reports from "../assets/reports.webp";
 import security from "../assets/security.jpeg";

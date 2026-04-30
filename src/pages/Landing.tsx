@@ -15,6 +15,7 @@ import {
 import { AnimatedButton } from "../components/ui/AnimatedButton";
 import { Section } from "../components/ui/Section";
 import { GradientOrbs } from "../components/ui/GradientOrbs";
+import { DemoUploadModal } from "../components/public/DemoUploadModal";
 
 const features = [
   {
@@ -72,6 +73,7 @@ const bullets = [
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
   const reduce = useReducedMotion();
+  const [isDemoOpen, setIsDemoOpen] = React.useState(false);
 
   return (
     <div className="relative">
@@ -140,9 +142,9 @@ export const Landing: React.FC = () => {
             <AnimatedButton
               variant="secondary"
               size="lg"
-              onClick={() => navigate("/quickstart")}
+              onClick={() => setIsDemoOpen(true)}
             >
-              Watch quickstart
+              Try statement demo
             </AnimatedButton>
           </motion.div>
 
@@ -356,6 +358,14 @@ export const Landing: React.FC = () => {
               >
                 Try it free
               </AnimatedButton>
+              <AnimatedButton
+                variant="secondary"
+                size="md"
+                className="ml-0 mt-3 md:ml-3 md:mt-0"
+                onClick={() => setIsDemoOpen(true)}
+              >
+                Run public demo
+              </AnimatedButton>
             </div>
           </div>
 
@@ -445,6 +455,11 @@ export const Landing: React.FC = () => {
           </div>
         </div>
       </Section>
+
+      <DemoUploadModal
+        isOpen={isDemoOpen}
+        onClose={() => setIsDemoOpen(false)}
+      />
     </div>
   );
 };

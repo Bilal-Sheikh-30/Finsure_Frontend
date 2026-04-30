@@ -243,6 +243,17 @@
     animation: slide-in 0.3s ease-out;
   }
 
+  /* Hide scrollbar but keep horizontal/vertical scrolling. Used by the
+     mobile bottom-nav so its 9-item rail can scroll without an ugly bar
+     eating the safe-area padding. */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   /* ------------------------------------------------------------------ */
   /* Reusable theme helpers                                              */
   /* ------------------------------------------------------------------ */

@@ -109,7 +109,7 @@ export const Upload: React.FC = () => {
       toast.success("Files uploaded successfully");
       setTimeout(() => navigate("/history"), 1200);
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to upload files");
+      toast.error(err.response?.data?.detail||err.response?.data?.message || "Failed to upload files");
     } finally {
       setIsUploading(false);
     }

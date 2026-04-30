@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock, Loader, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Mail, Lock, Loader, Eye, EyeOff, ArrowRight, KeyRound } from "lucide-react";
 
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "../utils/toast";
@@ -13,8 +13,13 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [requiresTwoFactor, setRequiresTwoFactor] = useState(false);
+  const [twoFactorToken, setTwoFactorToken] = useState("");
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [backupCode, setBackupCode] = useState("");
+  const [useBackupCode, setUseBackupCode] = useState(false);
 
-  const { login } = useAuth();
+  const { login, completeTwoFactorLogin } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,11 +27,27 @@ export const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      toast.success("Login successful!");
-      navigate("/dashboard");
+      if (!requiresTwoFactor) {
+        const res = await login(email, password);
+        if (res.requires2fa) {
+          setRequiresTwoFactor(true);
+          setTwoFactorToken(res.twoFactorToken || "");
+          toast.info("Enter your 2FA code to continue");
+        } else {
+          toast.success("Login successful!");
+          navigate("/dashboard");
+        }
+      } else {
+        await completeTwoFactorLogin({
+          twoFactorToken,
+          code: useBackupCode ? undefined : twoFactorCode,
+          backupCode: useBackupCode ? backupCode : undefined,
+        });
+        toast.success("Login successful!");
+        navigate("/dashboard");
+      }
     } catch {
-      toast.error("Invalid email or password");
+      toast.error("Unable to sign in. Check your credentials or 2FA code.");
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +76,7 @@ export const Login: React.FC = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          disabled={requiresTwoFactor}
           icon={<Mail size={18} />}
           placeholder="you@company.com"
           autoComplete="email"
@@ -66,6 +88,7 @@ export const Login: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          disabled={requiresTwoFactor}
           icon={<Lock size={18} />}
           placeholder="••••••••"
           autoComplete="current-password"
@@ -74,12 +97,65 @@ export const Login: React.FC = () => {
               type="button"
               onClick={() => setShowPassword((v) => !v)}
               aria-label={showPassword ? "Hide password" : "Show password"}
+              disabled={requiresTwoFactor}
               className="w-8 h-8 flex items-center justify-center rounded-full text-[var(--text-secondary)] hover:text-[color:var(--accent)] hover:bg-[color:var(--accent-soft)] transition-colors"
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           }
         />
+
+        {requiresTwoFactor && (
+          <div className="space-y-3">
+            <div className="flex gap-2 text-xs">
+              <button
+                type="button"
+                onClick={() => setUseBackupCode(false)}
+                className={`px-3 py-1 rounded-full border ${
+                  !useBackupCode
+                    ? "border-[color:var(--accent)] text-[color:var(--accent)]"
+                    : "border-[var(--border-color)] text-[var(--text-secondary)]"
+                }`}
+              >
+                Authenticator code
+              </button>
+              <button
+                type="button"
+                onClick={() => setUseBackupCode(true)}
+                className={`px-3 py-1 rounded-full border ${
+                  useBackupCode
+                    ? "border-[color:var(--accent)] text-[color:var(--accent)]"
+                    : "border-[var(--border-color)] text-[var(--text-secondary)]"
+                }`}
+              >
+                Backup code
+              </button>
+            </div>
+            {useBackupCode ? (
+              <AuthField
+                label="Backup code"
+                type="text"
+                value={backupCode}
+                onChange={(e) => setBackupCode(e.target.value)}
+                required
+                icon={<KeyRound size={18} />}
+                placeholder="ABCD-EFGH"
+                autoComplete="one-time-code"
+              />
+            ) : (
+              <AuthField
+                label="Authenticator code"
+                type="text"
+                value={twoFactorCode}
+                onChange={(e) => setTwoFactorCode(e.target.value)}
+                required
+                icon={<KeyRound size={18} />}
+                placeholder="000000"
+                autoComplete="one-time-code"
+              />
+            )}
+          </div>
+        )}
 
         <div className="flex items-center justify-between text-sm">
           <label className="flex items-center gap-2 text-[var(--text-secondary)] cursor-pointer select-none">
@@ -113,7 +189,11 @@ export const Login: React.FC = () => {
             )
           }
         >
-          {isLoading ? "Signing in…" : "Sign in"}
+          {isLoading
+            ? "Signing in…"
+            : requiresTwoFactor
+            ? "Verify & continue"
+            : "Sign in"}
         </AnimatedButton>
       </form>
     </AuthShell>

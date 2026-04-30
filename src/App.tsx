@@ -24,6 +24,7 @@ import { Settings } from './pages/Settings';
 import { Security } from './pages/Security';
 import { Help } from './pages/Help';
 import { Documentation } from './pages/Documentation';
+import { DemoResults } from './pages/DemoResults';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -69,6 +70,7 @@ function AppRoutes() {
 
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Landing />} />
+        <Route path="/demo/results" element={<DemoResults />} />
         <Route path="/quickstart" element={<Quickstart />} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/faqs" element={<FAQs />} />

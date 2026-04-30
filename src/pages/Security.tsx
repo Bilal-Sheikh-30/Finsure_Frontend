@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Shield,
   Smartphone,
@@ -10,30 +10,127 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "../utils/toast";
+import { twoFactorApi } from "../services/apiClient";
 
 export const Security: React.FC = () => {
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [isStatusLoading, setIsStatusLoading] = useState(true);
+  const [backupCodesRemaining, setBackupCodesRemaining] = useState(0);
   const [verificationCode, setVerificationCode] = useState("");
   const [showSetup, setShowSetup] = useState(false);
+  const [setupData, setSetupData] = useState<
+    | {
+        otpauth_uri: string;
+        qr_code_data_url: string;
+        manual_entry_key: string;
+      }
+    | null
+  >(null);
+  const [backupCodes, setBackupCodes] = useState<string[]>([]);
+  const [isWorking, setIsWorking] = useState(false);
+  const [showDisableForm, setShowDisableForm] = useState(false);
+  const [disablePassword, setDisablePassword] = useState("");
+  const [disableCode, setDisableCode] = useState("");
+  const [disableBackupCode, setDisableBackupCode] = useState("");
+  const [disableUseBackupCode, setDisableUseBackupCode] = useState(false);
+  const [showRegenerateForm, setShowRegenerateForm] = useState(false);
+  const [regenPassword, setRegenPassword] = useState("");
+  const [regenCode, setRegenCode] = useState("");
 
-  const handleEnable2FA = () => setShowSetup(true);
+  useEffect(() => {
+    let isMounted = true;
+    const loadStatus = async () => {
+      try {
+        const res = await twoFactorApi.getStatus();
+        if (!isMounted) return;
+        setTwoFactorEnabled(!!res.enabled);
+        setBackupCodesRemaining(res.backup_codes_remaining ?? 0);
+      } catch (err: any) {
+        toast.error(err?.response?.data?.detail || "Failed to load 2FA status");
+      } finally {
+        if (isMounted) setIsStatusLoading(false);
+      }
+    };
 
-  const handleVerify2FA = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (verificationCode === "123456") {
-      setTwoFactorEnabled(true);
-      setShowSetup(false);
-      setVerificationCode("");
-      toast.success("Two-factor authentication enabled successfully!");
-    } else {
-      toast.error("Invalid verification code");
+    loadStatus();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleEnable2FA = async () => {
+    setIsWorking(true);
+    try {
+      const res = await twoFactorApi.startSetup();
+      setSetupData(res);
+      setShowSetup(true);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || "Failed to start 2FA setup");
+    } finally {
+      setIsWorking(false);
     }
   };
 
-  const handleDisable2FA = () => {
-    if (confirm("Are you sure you want to disable two-factor authentication?")) {
+  const handleVerify2FA = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsWorking(true);
+    try {
+      const res = await twoFactorApi.verifySetup({ code: verificationCode });
+      setTwoFactorEnabled(true);
+      setBackupCodes(res.backup_codes || []);
+      setBackupCodesRemaining((res.backup_codes || []).length);
+      setShowSetup(false);
+      setVerificationCode("");
+      toast.success("Two-factor authentication enabled successfully!");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || "Invalid verification code");
+    } finally {
+      setIsWorking(false);
+    }
+  };
+
+  const handleDisable2FA = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsWorking(true);
+    try {
+      await twoFactorApi.disable({
+        password: disablePassword,
+        code: disableUseBackupCode ? undefined : disableCode,
+        backup_code: disableUseBackupCode ? disableBackupCode : undefined,
+      });
       setTwoFactorEnabled(false);
+      setBackupCodes([]);
+      setBackupCodesRemaining(0);
+      setShowDisableForm(false);
+      setDisablePassword("");
+      setDisableCode("");
+      setDisableBackupCode("");
       toast.success("Two-factor authentication disabled");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || "Failed to disable 2FA");
+    } finally {
+      setIsWorking(false);
+    }
+  };
+
+  const handleRegenerateBackupCodes = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsWorking(true);
+    try {
+      const res = await twoFactorApi.regenerateBackupCodes({
+        password: regenPassword,
+        code: regenCode,
+      });
+      setBackupCodes(res.backup_codes || []);
+      setBackupCodesRemaining((res.backup_codes || []).length);
+      setShowRegenerateForm(false);
+      setRegenPassword("");
+      setRegenCode("");
+      toast.success("Backup codes regenerated");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || "Failed to regenerate backup codes");
+    } finally {
+      setIsWorking(false);
     }
   };
 
@@ -99,17 +196,38 @@ export const Security: React.FC = () => {
                   </span>
                   <motion.button
                     whileTap={{ scale: 0.97 }}
-                    onClick={handleDisable2FA}
+                    onClick={() => setShowDisableForm((prev) => !prev)}
                     className="px-4 py-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[color:var(--accent)]/60 text-sm font-medium transition-colors"
                   >
-                    Disable
+                    {showDisableForm ? "Cancel" : "Disable"}
+                  </motion.button>
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setShowRegenerateForm((prev) => !prev)}
+                    className="px-4 py-2 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[color:var(--accent)]/60 text-sm font-medium transition-colors"
+                  >
+                    {showRegenerateForm ? "Hide backup codes" : "Regenerate backup codes"}
                   </motion.button>
                 </div>
+              ) : isStatusLoading ? (
+                <button
+                  type="button"
+                  disabled
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm opacity-70 cursor-not-allowed"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                  }}
+                >
+                  <KeyRound size={16} />
+                  Checking status...
+                </button>
               ) : (
                 <motion.button
                   whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleEnable2FA}
+                  disabled={isWorking || isStatusLoading}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm shadow-[0_10px_30px_-10px_var(--accent-glow)]"
                   style={{
                     background:
@@ -120,10 +238,41 @@ export const Security: React.FC = () => {
                   Enable 2FA
                 </motion.button>
               )}
+              {twoFactorEnabled && (
+                <p className="mt-3 text-xs text-[var(--text-secondary)]">
+                  Backup codes remaining: {backupCodesRemaining}
+                </p>
+              )}
             </div>
           </div>
         </div>
       </motion.div>
+
+      {backupCodes.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.07 }}
+          className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-6"
+        >
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+            Backup codes
+          </h3>
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
+            Save these codes in a safe place. Each code can be used once.
+          </p>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {backupCodes.map((code) => (
+              <div
+                key={code}
+                className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] px-4 py-3 text-sm font-mono tracking-widest text-[var(--text-primary)]"
+              >
+                {code}
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* Setup flow */}
       <AnimatePresence initial={false}>
@@ -174,16 +323,24 @@ export const Security: React.FC = () => {
                       Scan the QR code
                     </h3>
                     <div className="inline-block p-3 rounded-2xl bg-white border border-[var(--border-color)] shadow-[0_10px_30px_-20px_var(--accent-glow)]">
-                      <div className="w-44 h-44 rounded-lg bg-[linear-gradient(45deg,#e5e7eb_25%,transparent_25%),linear-gradient(-45deg,#e5e7eb_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#e5e7eb_75%),linear-gradient(-45deg,transparent_75%,#e5e7eb_75%)] bg-[length:12px_12px] bg-[position:0_0,0_6px,6px_-6px,-6px_0] flex items-center justify-center">
-                        <span className="text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
-                          QR placeholder
-                        </span>
-                      </div>
+                      {setupData?.qr_code_data_url ? (
+                        <img
+                          src={setupData.qr_code_data_url}
+                          alt="2FA QR code"
+                          className="w-44 h-44 rounded-lg"
+                        />
+                      ) : (
+                        <div className="w-44 h-44 rounded-lg bg-[linear-gradient(45deg,#e5e7eb_25%,transparent_25%),linear-gradient(-45deg,#e5e7eb_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#e5e7eb_75%),linear-gradient(-45deg,transparent_75%,#e5e7eb_75%)] bg-[length:12px_12px] bg-[position:0_0,0_6px,6px_-6px,-6px_0] flex items-center justify-center">
+                          <span className="text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+                            Loading QR
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <p className="text-sm text-[var(--text-secondary)] mt-3">
                       Or enter this code manually:{" "}
                       <code className="bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-primary)] px-2 py-1 rounded text-xs">
-                        ABCD-EFGH-IJKL
+                        {setupData?.manual_entry_key || "-"}
                       </code>
                     </p>
                   </div>
@@ -208,12 +365,14 @@ export const Security: React.FC = () => {
                         placeholder="000000"
                         maxLength={6}
                         inputMode="numeric"
+                        disabled={isWorking}
                         className="w-full sm:w-64 bg-[var(--bg-primary)] text-[var(--text-primary)] tracking-[0.4em] text-center font-semibold text-lg border border-[var(--border-color)] rounded-xl px-4 py-3 focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all"
                       />
                       <div className="flex flex-wrap gap-3">
                         <motion.button
                           whileTap={{ scale: 0.98 }}
                           type="submit"
+                          disabled={isWorking}
                           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm shadow-[0_10px_30px_-10px_var(--accent-glow)]"
                           style={{
                             background:
@@ -221,7 +380,7 @@ export const Security: React.FC = () => {
                           }}
                         >
                           <CheckCircle size={16} />
-                          Verify & enable
+                          {isWorking ? "Enabling..." : "Verify & enable"}
                         </motion.button>
                         <button
                           type="button"
@@ -232,12 +391,170 @@ export const Security: React.FC = () => {
                         </button>
                       </div>
                     </form>
-                    <p className="text-xs text-[var(--text-secondary)] mt-2">
-                      Demo code: <span className="font-mono">123456</span>
-                    </p>
                   </div>
                 </li>
               </ol>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence initial={false}>
+        {twoFactorEnabled && showDisableForm && (
+          <motion.div
+            initial={{ opacity: 0, y: 12, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -6, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-6">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                Disable two-factor authentication
+              </h3>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                Confirm your password and a 2FA method to continue.
+              </p>
+              <form onSubmit={handleDisable2FA} className="mt-4 space-y-3">
+                <input
+                  type="password"
+                  value={disablePassword}
+                  onChange={(e) => setDisablePassword(e.target.value)}
+                  placeholder="Current password"
+                  className="w-full bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-color)] rounded-xl px-4 py-3 focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all"
+                  required
+                />
+                <div className="flex gap-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setDisableUseBackupCode(false)}
+                    className={`px-3 py-1 rounded-full border ${
+                      !disableUseBackupCode
+                        ? "border-[color:var(--accent)] text-[color:var(--accent)]"
+                        : "border-[var(--border-color)] text-[var(--text-secondary)]"
+                    }`}
+                  >
+                    Authenticator code
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDisableUseBackupCode(true)}
+                    className={`px-3 py-1 rounded-full border ${
+                      disableUseBackupCode
+                        ? "border-[color:var(--accent)] text-[color:var(--accent)]"
+                        : "border-[var(--border-color)] text-[var(--text-secondary)]"
+                    }`}
+                  >
+                    Backup code
+                  </button>
+                </div>
+                {disableUseBackupCode ? (
+                  <input
+                    type="text"
+                    value={disableBackupCode}
+                    onChange={(e) => setDisableBackupCode(e.target.value)}
+                    placeholder="ABCD-EFGH"
+                    className="w-full bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-color)] rounded-xl px-4 py-3 focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all"
+                    required
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={disableCode}
+                    onChange={(e) => setDisableCode(e.target.value)}
+                    placeholder="000000"
+                    maxLength={6}
+                    inputMode="numeric"
+                    className="w-full bg-[var(--bg-primary)] text-[var(--text-primary)] tracking-[0.3em] text-center font-semibold text-lg border border-[var(--border-color)] rounded-xl px-4 py-3 focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all"
+                    required
+                  />
+                )}
+                <div className="flex flex-wrap gap-3">
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={isWorking}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm shadow-[0_10px_30px_-10px_var(--accent-glow)]"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                    }}
+                  >
+                    {isWorking ? "Disabling..." : "Disable 2FA"}
+                  </motion.button>
+                  <button
+                    type="button"
+                    onClick={() => setShowDisableForm(false)}
+                    disabled={isWorking}
+                    className="px-5 py-2.5 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[color:var(--accent)]/60 font-medium text-sm transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence initial={false}>
+        {twoFactorEnabled && showRegenerateForm && (
+          <motion.div
+            initial={{ opacity: 0, y: 12, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -6, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl p-6">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                Regenerate backup codes
+              </h3>
+              <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                This replaces any unused codes with a new set.
+              </p>
+              <form onSubmit={handleRegenerateBackupCodes} className="mt-4 space-y-3">
+                <input
+                  type="password"
+                  value={regenPassword}
+                  onChange={(e) => setRegenPassword(e.target.value)}
+                  placeholder="Current password"
+                  className="w-full bg-[var(--bg-primary)] text-[var(--text-primary)] border border-[var(--border-color)] rounded-xl px-4 py-3 focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all"
+                  required
+                />
+                <input
+                  type="text"
+                  value={regenCode}
+                  onChange={(e) => setRegenCode(e.target.value)}
+                  placeholder="000000"
+                  maxLength={6}
+                  inputMode="numeric"
+                  className="w-full bg-[var(--bg-primary)] text-[var(--text-primary)] tracking-[0.3em] text-center font-semibold text-lg border border-[var(--border-color)] rounded-xl px-4 py-3 focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all"
+                  required
+                />
+                <div className="flex flex-wrap gap-3">
+                  <motion.button
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={isWorking}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white font-medium text-sm shadow-[0_10px_30px_-10px_var(--accent-glow)]"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                    }}
+                  >
+                    {isWorking ? "Regenerating..." : "Regenerate codes"}
+                  </motion.button>
+                  <button
+                    type="button"
+                    onClick={() => setShowRegenerateForm(false)}
+                    disabled={isWorking}
+                    className="px-5 py-2.5 rounded-xl bg-[var(--bg-tertiary)] text-[var(--text-primary)] border border-[var(--border-color)] hover:border-[color:var(--accent)]/60 font-medium text-sm transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
           </motion.div>
         )}
