@@ -19,6 +19,20 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401) {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("finsure:auth-logout"));
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // REAL AUTH API
 export const authApi = {
   signup: async (data: {

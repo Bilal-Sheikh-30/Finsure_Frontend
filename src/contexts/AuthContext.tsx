@@ -54,6 +54,25 @@ const generateAvatar = (name: string) => {
   );
 };
 
+const decodeJwtPayload = (token: string) => {
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return null;
+    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(normalized.length + ((4 - (normalized.length % 4)) % 4), "=");
+    const decoded = atob(padded);
+    return JSON.parse(decoded) as { exp?: number };
+  } catch {
+    return null;
+  }
+};
+
+const isTokenExpired = (token: string) => {
+  const payload = decodeJwtPayload(token);
+  if (!payload || typeof payload.exp !== "number") return true;
+  return Date.now() >= payload.exp * 1000;
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
@@ -66,6 +85,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     const savedUser = localStorage.getItem("user");
 
     if (token && savedUser) {
+      if (isTokenExpired(token)) {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
       const parsed = JSON.parse(savedUser) as User;
       // Always regenerate the avatar from the current generator so existing
       // sessions pick up style changes (e.g. initials swap) without re-login.
@@ -132,6 +158,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.removeItem("user");
     setUser(null);
   };
+
+  useEffect(() => {
+    const handleForcedLogout = () => logout();
+    window.addEventListener("finsure:auth-logout", handleForcedLogout);
+    return () => window.removeEventListener("finsure:auth-logout", handleForcedLogout);
+  }, []);
 
   const updateUser = (updatedUser: User) => {
     setUser(updatedUser);
