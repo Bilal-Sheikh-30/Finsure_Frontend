@@ -18,13 +18,13 @@ export interface AnimatedButtonProps
  * Reusable pill button with spring-based hover + press micro-interactions.
  *
  * Three variants cover ~95% of marketing-page CTA needs:
- *   primary   — cyan gradient, high-prominence (main action)
- *   secondary — outlined, low-prominence (secondary action)
- *   ghost     — text-only with subtle hover wash (tertiary / nav)
+ *   primary   - cyan gradient, high-prominence (main action)
+ *   secondary - outlined, low-prominence (secondary action)
+ *   ghost     - text-only with subtle hover wash (tertiary / nav)
  *
  * Tailwind classes are kept here (not split per-variant) so a reader can see
  * the whole button definition at a glance. Color tokens are hard-coded to
- * the FINSURE brand palette intentionally — these CTAs are the brand.
+ * the FINSURE brand palette intentionally - these CTAs are the brand.
  */
 export const AnimatedButton = React.forwardRef<
   HTMLButtonElement,
@@ -49,7 +49,7 @@ export const AnimatedButton = React.forwardRef<
           ? "px-8 py-4 text-lg"
           : "px-6 py-3 text-base";
 
-    // Primary still uses the brand gradient — the cyan-on-navy text combo
+    // Primary still uses the brand gradient - the cyan-on-navy text combo
     // reads clean on both themes because the button pill itself is the
     // bright cyan and the label is the deep navy.
     //

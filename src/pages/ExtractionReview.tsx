@@ -238,7 +238,7 @@ export const ExtractionReview: React.FC = () => {
         ))}
       </div>
 
-      {/* Table — the styled card lives on HorizontalScroller itself so
+      {/* Table - the styled card lives on HorizontalScroller itself so
           its floating "scroll →" chevron isn't clipped by an outer
           overflow-hidden wrapper. */}
       <div>

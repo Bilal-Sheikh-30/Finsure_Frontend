@@ -186,7 +186,7 @@ export const extractionApi = {
       // "Uncategorized"). Previously this field was being overwritten with
       // income/expense derived from trxType.
       category: t.category || "Uncategorized",
-      // credit / debit — used to color amount green vs red
+      // credit / debit - used to color amount green vs red
       trxType: t.trxType,
       categorizedBy: t.categorizedBy ?? null,
       taxable: t.taxable === "true" || t.taxable === true,
@@ -302,11 +302,11 @@ export const reportsApi = {
   getAll: async () => {
     const res = await apiClient.get("/api/v1/reports/");
     // BE returns {success:false} (no reports key) for users with no reports
-    // yet — normalize to [] so the caller can always .map() safely.
+    // yet - normalize to [] so the caller can always .map() safely.
     return res.data?.reports ?? [];
   },
 
-  // Generate report — all three types hit the real backend now.
+  // Generate report - all three types hit the real backend now.
   generate: async (reportType: string, startDate: string, endDate: string) => {
     const res = await apiClient.post("/api/v1/reports/generate", {
       reportType,

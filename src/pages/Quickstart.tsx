@@ -18,7 +18,7 @@ const steps = [
     icon: Upload,
     title: "Upload documents",
     description:
-      "Drag & drop a bank statement or receipt. PDF, JPG, PNG — with password-protected PDFs supported.",
+      "Drag & drop a bank statement or receipt. PDF, JPG, PNG - with password-protected PDFs supported.",
     details: [
       "Bulk upload multiple files at once",
       "Automatic file-type detection",
@@ -40,7 +40,7 @@ const steps = [
     icon: BarChart3,
     title: "Review & edit",
     description:
-      "Verify extracted data inline. Tweak a category, mark something as taxable — all changes audited.",
+      "Verify extracted data inline. Tweak a category, mark something as taxable - all changes audited.",
     details: [
       "Inline editing",
       "Bulk re-categorization",
@@ -51,7 +51,7 @@ const steps = [
     icon: FileCheck,
     title: "Generate reports",
     description:
-      "P&L, cash flow, category breakdowns — one click, export to CSV or branded PDF.",
+      "P&L, cash flow, category breakdowns - one click, export to CSV or branded PDF.",
     details: [
       "Income vs Expense",
       "Cash flow summary with running balance",
@@ -96,7 +96,7 @@ export const Quickstart: React.FC = () => {
             transition={{ duration: 0.55, delay: 0.16 }}
             className="mt-5 max-w-xl mx-auto text-lg text-[var(--text-secondary)]"
           >
-            From raw PDF statement to polished report — here's exactly how it
+            From raw PDF statement to polished report - here's exactly how it
             flows.
           </motion.p>
           <motion.div
@@ -134,7 +134,7 @@ export const Quickstart: React.FC = () => {
               transition={{ duration: 0.55, delay: i * 0.06 }}
               className="relative pl-16 md:pl-24 pb-12 last:pb-0"
             >
-              {/* Icon node — solid base so the timeline line doesn't bleed through */}
+              {/* Icon node - solid base so the timeline line doesn't bleed through */}
               <div className="absolute left-0 top-0 w-[46px] h-[46px] md:w-[62px] md:h-[62px] rounded-xl bg-[var(--bg-primary)] border border-[color:var(--accent)]/40 flex items-center justify-center shadow-accent overflow-hidden z-10">
                 <div
                   aria-hidden

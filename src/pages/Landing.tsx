@@ -52,7 +52,7 @@ const features = [
     icon: FileCheck,
     title: "Automated Reports",
     description:
-      "P&L, cash-flow, and category breakdowns — one click, boardroom-ready.",
+      "P&L, cash-flow, and category breakdowns - one click, boardroom-ready.",
   },
 ];
 
@@ -83,7 +83,7 @@ export const Landing: React.FC = () => {
       <section className="relative overflow-hidden">
         <GradientOrbs />
 
-        {/* Faint grid behind the hero — cheap, gives depth without a bg image */}
+        {/* Faint grid behind the hero - cheap, gives depth without a bg image */}
         <div
           aria-hidden
           className="absolute inset-0 bg-[linear-gradient(var(--border-color)_1px,transparent_1px),linear-gradient(90deg,var(--border-color)_1px,transparent_1px)] bg-[size:56px_56px] opacity-[0.25] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]"
@@ -98,7 +98,7 @@ export const Landing: React.FC = () => {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[color:var(--accent-ring)] bg-[color:var(--accent-soft)] text-[color:var(--accent)] text-xs font-medium backdrop-blur-sm"
           >
             <Sparkles size={14} />
-            New — AI-powered transaction categorization
+            New - AI-powered transaction categorization
           </motion.div>
 
           {/* Headline */}
@@ -121,7 +121,7 @@ export const Landing: React.FC = () => {
             className="mt-6 mx-auto max-w-2xl text-lg md:text-xl text-[var(--text-secondary)] leading-relaxed"
           >
             FINSURE turns bank statements and receipts into categorized,
-            exportable insights. Upload, extract, analyze, and report — all
+            exportable insights. Upload, extract, analyze, and report - all
             with enterprise-grade security.
           </motion.p>
 
@@ -164,7 +164,7 @@ export const Landing: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Floating hero card — the "product shot" */}
+        {/* Floating hero card - the "product shot" */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -329,7 +329,7 @@ export const Landing: React.FC = () => {
             </h2>
             <p className="mt-4 text-[var(--text-secondary)]">
               You uploaded a PDF. You want clean totals. Everything in between
-              — parsing, categorizing, reconciling — is our problem.
+              - parsing, categorizing, reconciling - is our problem.
             </p>
 
             <ul className="mt-8 space-y-3">
@@ -369,7 +369,7 @@ export const Landing: React.FC = () => {
             </div>
           </div>
 
-          {/* Visual side — animated pipeline diagram */}
+          {/* Visual side - animated pipeline diagram */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}

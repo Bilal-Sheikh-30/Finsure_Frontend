@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 /**
  * Wraps any wide content (tables, card rows) in a horizontal scroll
  * container that telegraphs "there's more →" the same way the bottom
- * MobileNav does — edge fade + bouncing chevron — so users learn one
+ * MobileNav does - edge fade + bouncing chevron - so users learn one
  * consistent overflow affordance across the app.
  *
  * Behaviour:
@@ -52,7 +52,7 @@ export const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
     // misses real overflow because the child table hasn't laid out
     // yet (rows arrive async, fonts load late, mobile-emulation
     // resizes the iframe a tick after render). Read once now, again
-    // after a frame, again after 100/400ms — cheap insurance.
+    // after a frame, again after 100/400ms - cheap insurance.
     update();
     const raf = requestAnimationFrame(update);
     const t1 = window.setTimeout(update, 100);
@@ -100,7 +100,7 @@ export const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
     return () => window.clearTimeout(tid);
   }, [peekOnMount]);
 
-  // The relative wrapper deliberately does NOT use overflow-hidden — that
+  // The relative wrapper deliberately does NOT use overflow-hidden - that
   // would clip the floating chevron pill. Instead the inner scroll
   // viewport inherits border-radius from the parent so the table content
   // still respects rounded corners visually.
@@ -113,7 +113,7 @@ export const HorizontalScroller: React.FC<HorizontalScrollerProps> = ({
         {children}
       </div>
 
-      {/* Floating accent pills — sit above the content like a "next" /
+      {/* Floating accent pills - sit above the content like a "next" /
           "prev" button so the cue reads at a glance. The earlier subtle
           edge-fade got lost because it faded into the same surface
           colour as the table; an explicit gradient pill cuts through. */}

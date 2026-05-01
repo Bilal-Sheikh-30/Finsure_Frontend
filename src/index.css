@@ -40,14 +40,14 @@
     --border-color: rgba(20, 231, 255, 0.2);
     --border-hover: #14e7ff;
 
-    /* Dark-mode accent — the bright brand cyan — stays. */
+    /* Dark-mode accent - the bright brand cyan - stays. */
     --accent: #14e7ff;
     --accent-hover: #0ab6ff;
     --accent-soft: rgba(20, 231, 255, 0.1);
     --accent-ring: rgba(20, 231, 255, 0.35);
     --accent-glow: rgba(20, 231, 255, 0.25);
 
-    /* Flip the native widget palette for dark mode — the browser's
+    /* Flip the native widget palette for dark mode - the browser's
        built-in date picker popup will come out dark automatically. */
     color-scheme: dark;
   }
@@ -57,14 +57,14 @@
   /*                                                                     */
   /* Removes the native OS dropdown arrow and paints our own brand caret */
   /* (cyan `#0ab6ff`). The caret colour is embedded in the SVG so it     */
-  /* looks the same in both light and dark mode — the pill backgrounds   */
+  /* looks the same in both light and dark mode - the pill backgrounds   */
   /* around it are driven by the --bg-* / --text-* variables set above.  */
   /* ------------------------------------------------------------------ */
   select {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    /* Deeper cyan caret for light mode — matches --accent (#0891b2). */
+    /* Deeper cyan caret for light mode - matches --accent (#0891b2). */
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230891b2' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
@@ -73,7 +73,7 @@
     cursor: pointer;
   }
 
-  /* Brighter caret in dark mode — brand cyan '#14e7ff' reads better on
+  /* Brighter caret in dark mode - brand cyan '#14e7ff' reads better on
      the deep-navy backgrounds. */
   .dark select {
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2314e7ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
@@ -85,7 +85,7 @@
     display: none;
   }
 
-  /* Dropdown list items — browsers give us limited styling hooks here
+  /* Dropdown list items - browsers give us limited styling hooks here
      (only bg + color are widely supported), but it's enough to keep the
      list from flashing white in dark mode on Chromium. */
   select option {
@@ -116,7 +116,7 @@
     color-scheme: inherit;
   }
 
-  /* Calendar / clock icon — light mode: keep it dark-grey; dark mode:
+  /* Calendar / clock icon - light mode: keep it dark-grey; dark mode:
      invert to cyan-ish white. Opacity bumps on hover for affordance. */
   input[type="date"]::-webkit-calendar-picker-indicator,
   input[type="time"]::-webkit-calendar-picker-indicator,
@@ -258,7 +258,7 @@
   /* Reusable theme helpers                                              */
   /* ------------------------------------------------------------------ */
 
-  /* Glass-card surface — translucent bg + blur + hairline border.
+  /* Glass-card surface - translucent bg + blur + hairline border.
      Use for floating panels (modals, popovers, hero cards) where you want
      depth without a hard edge. */
   .glass-card {
@@ -268,7 +268,7 @@
     border: 1px solid var(--border-color);
   }
 
-  /* Accent text / background / border / ring — theme-aware brand cyan. */
+  /* Accent text / background / border / ring - theme-aware brand cyan. */
   .text-accent {
     color: var(--accent);
   }

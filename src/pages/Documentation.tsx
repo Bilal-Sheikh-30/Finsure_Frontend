@@ -70,7 +70,7 @@ export const Documentation: React.FC = () => {
           </h1>
           <p className="mt-3 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
             Everything you need to upload statements, review extractions, and
-            make sense of your financial data — in one place.
+            make sense of your financial data - in one place.
           </p>
         </div>
       </motion.div>

@@ -686,7 +686,7 @@ export const Reports: React.FC = () => {
 
         {/* Mobile viewing wrapper.
             The report itself MUST stay at its A4 layout width so the
-            on-screen preview matches the exported PDF exactly — we just
+            on-screen preview matches the exported PDF exactly - we just
             give it a horizontal scroller on narrow screens with the
             same chevron affordance used elsewhere in the app.
             • minWidth ensures the layout doesn't collapse on phones
@@ -750,7 +750,7 @@ export const Reports: React.FC = () => {
             </div>
           </div>
 
-          {/* Income vs Expense Report — P&L view */}
+          {/* Income vs Expense Report - P&L view */}
           {selectedReport.type === "income_expense" && (
             <>
               {/* Headline cards */}
@@ -798,7 +798,7 @@ export const Reports: React.FC = () => {
                 ))}
               </div>
 
-              {/* Insights strip — averages + profitability count */}
+              {/* Insights strip - averages + profitability count */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {[
                   {
@@ -819,14 +819,14 @@ export const Reports: React.FC = () => {
                     label: "Best Month",
                     value: selectedReport.summary.bestMonth
                       ? `${selectedReport.summary.bestMonth.month} · ${formatCurrency(selectedReport.summary.bestMonth.net)}`
-                      : "—",
+                      : "-",
                     className: "print-positive",
                   },
                   {
                     label: "Worst Month",
                     value: selectedReport.summary.worstMonth
                       ? `${selectedReport.summary.worstMonth.month} · ${formatCurrency(selectedReport.summary.worstMonth.net)}`
-                      : "—",
+                      : "-",
                     className: "print-negative",
                   },
                 ].map((item, i) => (
@@ -1006,7 +1006,7 @@ export const Reports: React.FC = () => {
 
             return (
               <>
-                {/* Summary cards — balanced 2x2: income side + expense side */}
+                {/* Summary cards - balanced 2x2: income side + expense side */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   {[
                     {
@@ -1073,7 +1073,7 @@ export const Reports: React.FC = () => {
             );
           })()}
 
-          {/* Cash Flow Report — liquidity story */}
+          {/* Cash Flow Report - liquidity story */}
           {selectedReport.type === "cashflow" && (
             <>
               {/* Balance journey: Opening → Change → Closing */}
@@ -1141,7 +1141,7 @@ export const Reports: React.FC = () => {
                     label: "Largest Single Inflow",
                     value: selectedReport.summary.largestInflow
                       ? `${formatCurrency(selectedReport.summary.largestInflow.amount)} · ${selectedReport.summary.largestInflow.date}`
-                      : "—",
+                      : "-",
                     icon: TrendingUp,
                     className: "print-positive",
                   },
@@ -1149,7 +1149,7 @@ export const Reports: React.FC = () => {
                     label: "Largest Single Outflow",
                     value: selectedReport.summary.largestOutflow
                       ? `${formatCurrency(selectedReport.summary.largestOutflow.amount)} · ${selectedReport.summary.largestOutflow.date}`
-                      : "—",
+                      : "-",
                     icon: TrendingDown,
                     className: "print-negative",
                   },

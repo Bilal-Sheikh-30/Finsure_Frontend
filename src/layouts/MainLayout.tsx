@@ -37,7 +37,7 @@ export const MainLayout: React.FC = () => {
 
       <MobileNav />
 
-      {/* Floating AI assistant — bottom-right across all authenticated pages. */}
+      {/* Floating AI assistant - bottom-right across all authenticated pages. */}
       <ChatWidget />
     </div>
   );

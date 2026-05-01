@@ -10,7 +10,7 @@ const faqs = [
     category: "Product",
     question: "What is FINSURE?",
     answer:
-      "FINSURE is a financial workflow platform that turns raw documents — bank statements, receipts, invoices — into clean, categorized, exportable insights. Upload, review, report.",
+      "FINSURE is a financial workflow platform that turns raw documents - bank statements, receipts, invoices - into clean, categorized, exportable insights. Upload, review, report.",
   },
   {
     category: "Security",
@@ -34,7 +34,7 @@ const faqs = [
     category: "Accuracy",
     question: "How accurate is the extraction?",
     answer:
-      "Typical accuracy sits between 95–99%. Every extracted transaction is fully editable before it lands in your reports — and a hybrid rule + LLM categorizer keeps buckets sensible.",
+      "Typical accuracy sits between 95–99%. Every extracted transaction is fully editable before it lands in your reports - and a hybrid rule + LLM categorizer keeps buckets sensible.",
   },
   {
     category: "Account",

@@ -48,7 +48,7 @@ export const Logo: React.FC<LogoProps> = ({
       {/* Rounded tile */}
       <rect x="2" y="2" width="44" height="44" rx="11" fill="url(#finsure-logo-bg)" />
 
-      {/* Stylized "F" — vertical stem + two horizontal bars */}
+      {/* Stylized "F" - vertical stem + two horizontal bars */}
       <rect x="14" y="12" width="5" height="24" rx="1.5" fill="#0c111a" />
       <rect x="14" y="12" width="20" height="5" rx="1.5" fill="#0c111a" />
       <rect x="14" y="22" width="14" height="4.5" rx="1.5" fill="#0c111a" />

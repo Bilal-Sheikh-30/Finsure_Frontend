@@ -47,7 +47,7 @@ export const Help: React.FC = () => {
           Help &amp; support
         </h1>
         <p className="mt-1 text-[var(--text-secondary)]">
-          Ask the AI, read the docs, or drop us a line — whichever's faster.
+          Ask the AI, read the docs, or drop us a line - whichever's faster.
         </p>
       </div>
 

@@ -38,13 +38,13 @@ import { useTheme } from "../contexts/ThemeContext";
 /**
  * Global quick-search / command palette that lives inside the topbar.
  *
- * Indexes things the FE already owns — no extra API calls — so the input
+ * Indexes things the FE already owns - no extra API calls - so the input
  * goes from inert decoration to a real productivity surface:
  *
- *   • Pages      — every authenticated route
- *   • FAQs       — hardcoded list mirrored from src/pages/FAQs.tsx
- *   • Docs       — section IDs from src/pages/Documentation.tsx
- *   • Actions    — Toggle theme, Log out, Upload
+ *   • Pages      - every authenticated route
+ *   • FAQs       - hardcoded list mirrored from src/pages/FAQs.tsx
+ *   • Docs       - section IDs from src/pages/Documentation.tsx
+ *   • Actions    - Toggle theme, Log out, Upload
  *
  * Keyboard model:
  *   ⌘K / Ctrl+K  focus the input from anywhere
@@ -79,14 +79,14 @@ const KIND_LABELS: Record<ResultKind, string> = {
   action: "Actions",
 };
 
-// FAQs and doc sections are duplicated here on purpose — keeping the search
+// FAQs and doc sections are duplicated here on purpose - keeping the search
 // index decoupled from the page components means we can lazy-render those
 // pages without pulling them into the topbar bundle.
 const PAGES: Omit<SearchItem, "kind">[] = [
   {
     id: "page-overview",
     label: "Overview",
-    description: "Your finance home — KPIs and recent activity",
+    description: "Your finance home - KPIs and recent activity",
     keywords: "dashboard home stats kpis",
     icon: LayoutDashboard,
     to: "/dashboard",
@@ -185,7 +185,7 @@ const FAQS: Omit<SearchItem, "kind">[] = [
   {
     id: "faq-formats",
     label: "Which file formats are supported?",
-    description: "PDF, JPG, PNG — incl. password-protected PDFs",
+    description: "PDF, JPG, PNG - incl. password-protected PDFs",
     keywords: "pdf jpg png ocr",
     icon: FileText,
     to: "/faqs",
@@ -216,7 +216,7 @@ const FAQS: Omit<SearchItem, "kind">[] = [
   },
 ];
 
-// Mirrors the IDs scrolled-to inside Documentation.tsx — using a hash
+// Mirrors the IDs scrolled-to inside Documentation.tsx - using a hash
 // fragment lets the page jump straight to the right section.
 const DOCS: Omit<SearchItem, "kind">[] = [
   {
@@ -302,7 +302,7 @@ const Highlight: React.FC<{ text: string; query: string }> = ({
 interface GlobalSearchProps {
   /**
    * When true, render results full-width inside a sheet rather than a
-   * dropdown — used on small screens where the topbar is space-constrained.
+   * dropdown - used on small screens where the topbar is space-constrained.
    * Defaults to "auto" responsive behavior via Tailwind classes.
    */
   className?: string;
@@ -428,7 +428,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ className }) => {
 
   // Track whether the result list has off-screen content so we can render
   // affordances (mirrors the MobileNav pattern: edge fade + bouncing
-  // chevron) — important on phones where 4–5 rows is all that fits.
+  // chevron) - important on phones where 4–5 rows is all that fits.
   const updateScrollCue = useCallback(() => {
     const el = listRef.current;
     if (!el) {
@@ -479,7 +479,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ className }) => {
     [navigate, close],
   );
 
-  // Click-outside closes the dropdown without nuking the query — the user
+  // Click-outside closes the dropdown without nuking the query - the user
   // might want to refocus and pick up where they left off.
   useEffect(() => {
     if (!open) return;
@@ -589,7 +589,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ className }) => {
           className={`w-full bg-[var(--bg-secondary)] text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/70 pl-10 ${query ? "pr-10" : "pr-4 md:pr-16"} py-2.5 rounded-xl border border-[var(--border-color)] focus:border-[color:var(--accent)] focus:ring-2 focus:ring-[color:var(--accent-ring)] focus:outline-none transition-all text-sm`}
         />
 
-        {/* Clear button — visible on every screen size so the touch user
+        {/* Clear button - visible on every screen size so the touch user
             has a tappable way to reset the query without keyboard. */}
         {query && (
           <button
@@ -605,7 +605,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ className }) => {
           </button>
         )}
 
-        {/* ⌘K hint — desktop only, only when idle. */}
+        {/* ⌘K hint - desktop only, only when idle. */}
         {!query && !open && (
           <kbd className="hidden md:inline-flex absolute right-3 top-1/2 -translate-y-1/2 items-center gap-1 px-1.5 py-0.5 rounded-md border border-[var(--border-color)] bg-[var(--bg-tertiary)] text-[10px] font-mono text-[var(--text-secondary)] pointer-events-none">
             ⌘K
@@ -698,7 +698,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ className }) => {
                   })}
                 </div>
 
-                {/* Vertical scroll cues — same affordance pattern as the
+                {/* Vertical scroll cues - same affordance pattern as the
                     bottom MobileNav so users learn one mental model:
                     edge fade + bouncing chevron whenever there's more
                     content off-screen on that side. */}
@@ -759,7 +759,7 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({ className }) => {
               </div>
             )}
 
-            {/* Footer hint strip — desktop only (the keys it advertises
+            {/* Footer hint strip - desktop only (the keys it advertises
                 don't exist on touch devices, and it crowds the sheet). */}
             <div className="hidden md:flex items-center justify-between gap-3 px-3 py-2 border-t border-[var(--border-color)] bg-[var(--bg-primary)]/50 text-[11px] text-[var(--text-secondary)]">
               <div className="flex items-center gap-3">

@@ -6,7 +6,7 @@ import { Logo } from "../Logo";
 import { AnimatedButton } from "../ui/AnimatedButton";
 import { useTheme } from "../../contexts/ThemeContext";
 
-// Marketing nav entries — order reflects the typical SaaS funnel:
+// Marketing nav entries - order reflects the typical SaaS funnel:
 // product (Landing) → onboarding (Quickstart) → money (Pricing) → support (FAQs).
 const navLinks = [
   { to: "/", label: "Product" },
@@ -27,7 +27,7 @@ export const PublicNavbar: React.FC = () => {
   // without being too jumpy on elastic scrolling.
   useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 16));
 
-  // Close the mobile drawer on route change — otherwise it can stick around
+  // Close the mobile drawer on route change - otherwise it can stick around
   // because the drawer lives outside the <Routes> subtree.
   useEffect(() => {
     const close = () => setOpen(false);

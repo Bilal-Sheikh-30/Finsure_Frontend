@@ -32,7 +32,7 @@ interface ChatbotContextValue {
 
 const ChatbotContext = createContext<ChatbotContextValue | null>(null);
 
-// Per-user storage keys — two users on the same browser must never see each
+// Per-user storage keys - two users on the same browser must never see each
 // other's chats. Legacy key is migrated once into the current user's bucket.
 const STORAGE_PREFIX = "finsure.chatbot.messages";
 const LEGACY_KEY = "finsure.chatbot.messages";

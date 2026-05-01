@@ -60,7 +60,7 @@ export const Signup: React.FC = () => {
   return (
     <AuthShell
       title="Create your account"
-      subtitle="Start free — no credit card required."
+      subtitle="Start free - no credit card required."
       footer={
         <>
           Already have an account?{" "}
@@ -96,7 +96,7 @@ export const Signup: React.FC = () => {
           autoComplete="email"
         />
 
-        {/* User-type select — reuses the global themed <select> styling */}
+        {/* User-type select - reuses the global themed <select> styling */}
         <div>
           <label
             htmlFor="auth-user-type"

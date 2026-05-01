@@ -166,7 +166,7 @@ export const MobileNav: React.FC = () => {
           })}
         </div>
 
-        {/* Edge fades + bouncing chevrons — purely affordance, hidden when
+        {/* Edge fades + bouncing chevrons - purely affordance, hidden when
             scrolled to the matching end so we don't lie about overflow. */}
         <AnimatePresence>
           {canScrollLeft && (

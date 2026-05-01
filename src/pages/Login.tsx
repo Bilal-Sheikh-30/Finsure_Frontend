@@ -169,7 +169,7 @@ export const Login: React.FC = () => {
             type="button"
             className="text-[color:var(--accent)] hover:text-[color:var(--accent-hover)] transition-colors"
             onClick={() =>
-              toast.info("Password reset coming soon — email support@finsure.app")
+              toast.info("Password reset coming soon - email support@finsure.app")
             }
           >
             Forgot password?

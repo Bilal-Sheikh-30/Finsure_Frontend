@@ -13,7 +13,7 @@ import { GradientOrbs } from "../ui/GradientOrbs";
  * over the radial backdrop.
  *
  * Form content is passed in via `children` so each page controls its own
- * inputs — the shell just paints the container.
+ * inputs - the shell just paints the container.
  */
 export interface AuthShellProps {
   title: string;

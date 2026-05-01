@@ -67,7 +67,7 @@ const plans: Plan[] = [
 export const Pricing: React.FC = () => {
   const navigate = useNavigate();
   // Yearly toggle is a common expectation on pricing pages; we apply a
-  // pretend 20% discount when enabled. Pure UI — the trial flow on /signup
+  // pretend 20% discount when enabled. Pure UI - the trial flow on /signup
   // handles the actual billing later.
   const [yearly, setYearly] = useState(false);
 
