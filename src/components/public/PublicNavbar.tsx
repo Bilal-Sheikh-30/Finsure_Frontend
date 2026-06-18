@@ -11,7 +11,7 @@ import { useTheme } from "../../contexts/ThemeContext";
 const navLinks = [
   { to: "/", label: "Product" },
   { to: "/quickstart", label: "Quickstart" },
-  { to: "/pricing", label: "Pricing" },
+  // { to: "/pricing", label: "Pricing" },
   { to: "/faqs", label: "FAQs" },
 ];
 

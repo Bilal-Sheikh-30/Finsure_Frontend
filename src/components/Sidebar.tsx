@@ -11,7 +11,7 @@ import {
   Settings,
   Shield,
   HelpCircle,
-  DollarSign,
+  // DollarSign,
   Zap,
   Info,
   ChevronLeft,
@@ -41,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
   const publicLinks = [
     { to: "/", label: "About", icon: Info },
     { to: "/quickstart", label: "Quickstart", icon: Zap },
-    { to: "/pricing", label: "Pricing", icon: DollarSign },
+    // { to: "/pricing", label: "Pricing", icon: DollarSign },
     { to: "/faqs", label: "FAQs", icon: HelpCircle },
   ];
 

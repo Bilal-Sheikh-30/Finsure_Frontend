@@ -12,7 +12,7 @@ const columns: Array<{
     heading: "Product",
     links: [
       { label: "Overview", to: "/" },
-      { label: "Pricing", to: "/pricing" },
+      // { label: "Pricing", to: "/pricing" },
       { label: "Quickstart", to: "/quickstart" },
       { label: "FAQs", to: "/faqs" },
     ],
