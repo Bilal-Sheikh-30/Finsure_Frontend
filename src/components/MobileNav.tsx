@@ -8,7 +8,7 @@ import {
   History,
   Info,
   Zap,
-  DollarSign,
+  // DollarSign,
   HelpCircle,
   FileBarChart,
   BarChart3,
@@ -44,7 +44,7 @@ export const MobileNav: React.FC = () => {
   const publicLinks = [
     { to: "/", label: "About", icon: Info },
     { to: "/quickstart", label: "Start", icon: Zap },
-    { to: "/pricing", label: "Pricing", icon: DollarSign },
+    // { to: "/pricing", label: "Pricing", icon: DollarSign },
     { to: "/faqs", label: "FAQs", icon: HelpCircle },
   ];
 

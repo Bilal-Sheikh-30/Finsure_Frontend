@@ -10,7 +10,7 @@ import { MainLayout } from './layouts/MainLayout';
 
 import { Landing } from './pages/Landing';
 import { Quickstart } from './pages/Quickstart';
-import { Pricing } from './pages/Pricing';
+// import { Pricing } from './pages/Pricing';
 import { FAQs } from './pages/FAQs';
 import { Login } from './pages/Login';
 import { Signup } from './pages/Signup';
@@ -72,7 +72,7 @@ function AppRoutes() {
         <Route path="/" element={<Landing />} />
         <Route path="/demo/results" element={<DemoResults />} />
         <Route path="/quickstart" element={<Quickstart />} />
-        <Route path="/pricing" element={<Pricing />} />
+        {/* <Route path="/pricing" element={<Pricing />} /> */}
         <Route path="/faqs" element={<FAQs />} />
       </Route>
 
