@@ -444,13 +444,13 @@ export const Landing: React.FC = () => {
               >
                 Start free trial
               </AnimatedButton>
-              <AnimatedButton
+              {/* <AnimatedButton
                 variant="secondary"
                 size="lg"
                 onClick={() => navigate("/pricing")}
               >
                 See pricing
-              </AnimatedButton>
+              </AnimatedButton> */}
             </div>
           </div>
         </div>
